@@ -55,7 +55,11 @@ jobs:
             --overlay ./slurm-core/clouds/lxd.yaml \
             --overlay ./slurm-core/series/focal.yaml
           # wait until the workload-status of the slurmctld is "active"
-          until jq '.applications.slurmctld.units."slurmctld/0"."workload-status".current' | grep -m 1 "active"; do sleep 5 ; done
+          until juju status --format=json | \
+            jq '.applications.slurmctld.units."slurmctld/0"."workload-status".current' | \
+            tee /dev/tty | \ # write out what we get from jg
+            grep -m 1 "active"; \
+            do sleep 5 ; done
       - name: start up slurm cluster
         shell: bash
         run: |
