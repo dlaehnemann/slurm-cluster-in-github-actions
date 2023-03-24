@@ -58,8 +58,7 @@ jobs:
           until juju status --format=json | \
             jq '.applications.slurmctld.units."slurmctld/0"."workload-status".current' | \
             tee /dev/stdout | \
-            grep -m 1 "active"; \
-            do sleep 5 ; done
+            do sleep 15 ; done
       - name: start up slurm cluster
         shell: bash
         run: |
