@@ -53,6 +53,8 @@ jobs:
           juju deploy ./slurm-core/bundle.yaml \
             --overlay ./slurm-core/clouds/lxd.yaml \
             --overlay ./slurm-core/series/focal.yaml
+          juju status --format=json
+          juju status --format=yaml
       - name: start up slurm cluster
         shell: bash
         run: |
