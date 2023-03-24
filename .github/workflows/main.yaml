@@ -63,6 +63,7 @@ jobs:
       - name: start up slurm cluster
         shell: bash
         run: |
+          set -euxo pipefail
           # check cluster status
           juju run --unit slurmctld/0 sinfo
           # start up node, from down to idle state
