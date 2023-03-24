@@ -53,13 +53,12 @@ jobs:
           juju deploy ./slurm-core/bundle.yaml \
             --overlay ./slurm-core/clouds/lxd.yaml \
             --overlay ./slurm-core/series/focal.yaml
-        - name: start up slurm cluster
-          shell: bash
-          run: |
-            # check cluster status
-            juju run --unit slurmctld/0 sinfo
-            # start up node, from down to idle state
-            juju run-action slurmd/1 node-configured
-            # check cluster status again
-            juju run --unit slurmctld/0 sinfo
-
+      - name: start up slurm cluster
+        shell: bash
+        run: |
+          # check cluster status
+          juju run --unit slurmctld/0 sinfo
+          # start up node, from down to idle state
+          juju run-action slurmd/1 node-configured
+          # check cluster status again
+          juju run --unit slurmctld/0 sinfo
