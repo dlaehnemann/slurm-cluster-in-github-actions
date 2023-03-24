@@ -25,6 +25,7 @@ jobs:
       - name: Setup LXD
         # uses pre-installed LXD snap (22.04 comes with 5.0/stable)
         # installs and initializes LXD
+        # https://github.com/canonical/setup-lxd
         uses: canonical/setup-lxd@v0.1.0
       - name: configure lxc network
         shell: bash
