@@ -1,0 +1,65 @@
+name: slurm_setup_tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+
+jobs:
+  slurm_setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+      # The following is based on:
+      # https://omnivector-solutions.github.io/osd-documentation/master/installation.html
+      - name: install juju via snap
+        shell: bash
+        run: |
+          set -euxo pipefail
+          # --classic should be fine, according to:
+          # https://askubuntu.com/a/1354774/1110862
+          sudo snap install juju --classic
+      - name: Setup LXD
+        # uses pre-installed LXD snap (22.04 comes with 5.0/stable)
+        # installs and initializes LXD
+        uses: canonical/setup-lxd@v0.1.0
+      - name: configure lxc network
+        shell: bash
+        run: |
+          lxc network set lxdbr0 ipv6.address none
+      - name: bootstrap local cloud
+        shell: bash
+        run: |
+          set -euxo pipefail
+          juju bootstrap localhost --debug
+          juju add-model slurm
+      - name: install and deploy slurm bundle
+        shell: bash
+        env:
+          # VERSION: 1.4.0
+          COMMIT: 402854b8c28a50a2f03f0c75d411af36c5ce6ca6
+        run: |
+          set -euxo pipefail
+          # The last released version, 1.4.0, is much older than a lot of further (unreleased) commits,
+          # so I switched to pinning to a particular commit.
+          # wget https://github.com/omnivector-solutions/slurm-bundles/archive/refs/tags/${VERSION}.tar.gz
+          # tar xzf ${VERSION}.tar.gz
+          git clone https://github.com/omnivector-solutions/slurm-bundles
+          cd slurm-bundles
+          git checkout ${COMMIT}
+          juju deploy ./slurm-core/bundle.yaml \
+            --overlay ./slurm-core/clouds/lxd.yaml \
+            --overlay ./slurm-core/series/focal.yaml
+        - name: start up slurm cluster
+          shell: bash
+          run: |
+            # check cluster status
+            juju run --unit slurmctld/0 sinfo
+            # start up node, from down to idle state
+            juju run-action slurmd/1 node-configured
+            # check cluster status again
+            juju run --unit slurmctld/0 sinfo
+
