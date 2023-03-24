@@ -70,3 +70,15 @@ jobs:
           juju run-action slurmd/1 node-configured
           # check cluster status again
           juju run --unit slurmctld/0 sinfo
+      - name: take down slurm and lxd
+        shell: bash
+        run: |
+          set -euxo pipefail
+          # https://juju.is/docs/olm/removing-things
+          juju destroy-model slurm
+          # https://docs.rockylinux.org/guides/containers/lxd_web_servers/#starting-stopping
+          lxc stop --all
+          # https://snapcraft.io/docs/service-management
+          sudo snap stop lxd.daemon
+          sudo snap stop lxd
+
