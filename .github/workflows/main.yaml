@@ -57,10 +57,11 @@ jobs:
           # wait until the workload-status of the slurmctld is "active"
           until juju status --format=json | \
             jq '.applications[].units[]["workload-status", "juju-status"].current' | \
-            tee /dev/stdout | \
             grep -c -P "active|idle" | \
             grep -P "^10$"; \
             do sleep 15 ; done
+          juju status --format=json | \
+            jq '.applications[].units[]["workload-status", "juju-status"].current'
       - name: start up slurm cluster
         shell: bash
         run: |
