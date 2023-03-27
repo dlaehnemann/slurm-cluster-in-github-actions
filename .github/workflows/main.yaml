@@ -51,6 +51,9 @@ jobs:
           git clone https://github.com/omnivector-solutions/slurm-bundles
           cd slurm-bundles
           git checkout ${COMMIT}
+          cat slurm-core/bundle.yaml
+          cat slurm-core/clouds/lxd.yaml
+          cat slurm-core/series/focal.yaml
           juju deploy ./slurm-core/bundle.yaml \
             --overlay ./slurm-core/clouds/lxd.yaml \
             --overlay ./slurm-core/series/focal.yaml
