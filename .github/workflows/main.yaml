@@ -89,5 +89,6 @@ jobs:
           # https://snapcraft.io/docs/service-management
           sudo snap stop lxd.daemon
           sudo snap stop lxd
+          sudo snap remove juju
           df -h
 
