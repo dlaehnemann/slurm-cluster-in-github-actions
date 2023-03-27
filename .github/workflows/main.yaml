@@ -19,6 +19,7 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
+          df -h
           # --classic should be fine, according to:
           # https://askubuntu.com/a/1354774/1110862
           sudo snap install juju --classic
@@ -88,4 +89,5 @@ jobs:
           # https://snapcraft.io/docs/service-management
           sudo snap stop lxd.daemon
           sudo snap stop lxd
+          df -h
 
