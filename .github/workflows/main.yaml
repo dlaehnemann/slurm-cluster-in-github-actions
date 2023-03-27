@@ -74,7 +74,7 @@ jobs:
           # check cluster status
           juju run --unit slurmctld/0 sinfo
           # start up node, from down to idle state
-          juju run-action slurmd/0 node-configured
+          juju run-action slurmd/0 node-configured --wait
           # check cluster status again
           juju run --unit slurmctld/0 sinfo
       - name: take down slurm and lxd
