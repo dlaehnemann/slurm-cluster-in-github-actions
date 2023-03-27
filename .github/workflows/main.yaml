@@ -82,7 +82,7 @@ jobs:
         run: |
           set -euxo pipefail
           # https://juju.is/docs/olm/removing-things
-          juju destroy-model slurm
+          juju destroy-model -y slurm --force --no-wait
           # https://docs.rockylinux.org/guides/containers/lxd_web_servers/#starting-stopping
           lxc stop --all
           # https://snapcraft.io/docs/service-management
