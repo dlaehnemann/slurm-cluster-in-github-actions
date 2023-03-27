@@ -56,7 +56,8 @@ jobs:
           cat slurm-core/series/focal.yaml
           juju deploy ./slurm-core/bundle.yaml \
             --overlay ./slurm-core/clouds/lxd.yaml \
-            --overlay ./slurm-core/series/focal.yaml
+            --overlay ./slurm-core/series/focal.yaml \
+            --show-log
           # wait until the workload-status of the slurmctld is "active"
           until juju status --format=json | \
             jq '.applications[].units[]["workload-status", "juju-status"].current' | \
