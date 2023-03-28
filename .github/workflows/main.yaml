@@ -78,6 +78,15 @@ jobs:
           juju run-action slurmd/0 node-configured --wait
           # check cluster status again
           juju run --unit slurmctld/0 sinfo
+      - name: log into and submit stuff to slurm cluster
+        shell: bash
+        run: |
+          set -euxo pipefail
+          # https://stackoverflow.com/a/24756847/2352071
+          # https://juju.is/docs/olm/juju-ssh
+          juju ssh slurmctld/0
+          srun -vvvv echo "hello world"
+          exit
       - name: take down slurm and lxd
         shell: bash
         run: |
