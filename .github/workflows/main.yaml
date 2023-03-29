@@ -79,7 +79,7 @@ jobs:
           # check cluster status again
           juju run --unit slurmctld/0 sinfo
           juju run --unit slurmctld/0 scontrol show partition
-          juju run --unit slurmctld/0 srun --partition=osd-slurmd -vvvv echo "hello world"
+          juju run --unit slurmctld/0 'srun --partition=osd-slurmd -vvvv echo "hello world"'
       - name: log into and submit stuff to slurm cluster
         shell: bash
         run: |
