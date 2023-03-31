@@ -80,14 +80,13 @@ jobs:
           juju run --unit slurmctld/0 sinfo
           juju run --unit slurmctld/0 scontrol show partition
           juju run --unit slurmctld/0 'srun --partition=osd-slurmd -vvvv echo "hello world"'
-      - name: log into and submit stuff to slurm cluster
+      - name: log into slurmctld/0 node
         shell: bash
         run: |
           set -euxo pipefail
           # https://stackoverflow.com/a/24756847/2352071
           # https://juju.is/docs/olm/juju-ssh
           juju ssh slurmctld/0
-          srun -vvvv echo "hello world"
           exit
       - name: take down slurm and lxd
         shell: bash
